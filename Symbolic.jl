@@ -1,5 +1,6 @@
 module Symbolic
 import Base: +, -, *, /, ^, sin, cos, exp, log, sqrt
+export ∘
 
 +(x::Union{Symbol, Expr}) = x
 +(a::Union{Symbol, Expr, Number}, b::Union{Symbol, Expr, Number}) = :($a + $b)
@@ -18,5 +19,7 @@ cos(x::Union{Symbol, Expr, Number}) = :(cos($x))
 exp(x::Union{Symbol, Expr, Number}) = :(exp($x))
 log(x::Union{Symbol, Expr, Number}) = :(log($x))
 sqrt(x::Union{Symbol, Expr, Number}) = :(sqrt($x))
+
+∘(f::Function, g::Function) = x -> f(g(x))
 
 end
