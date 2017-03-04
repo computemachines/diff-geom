@@ -1,51 +1,34 @@
 module Geometric
+import Base: getindex
+export Up, Down, getindex
 
-export Up, Down
-
-Up(x, y) = Up2(x, y)
-Up(x, y, z) = Up3(x, y, z)
-Up(x, y, z, t) = Up4(x, y, z, t)
+Up(x, y) = Up2((x, y))
+Up(x, y, z) = Up3((x, y, z))
 
 immutable Up2{A, B}
-    x :: A
-    y :: B
+    elems :: Tuple{A, B}
 end
+getindex(up::Up2, key) = up.elems[key]
+
 
 immutable Up3{A, B, C}
-    x :: A
-    y :: B
-    z :: C
+    elems :: Tuple{A, B, C}
 end
+getindex(up::Up3, key) = up.elems[key]
 
-immutable Up4{A, B, C, D}
-    x :: A
-    y :: B
-    z :: C
-    t :: D
-end
+
+Down(x, y) = Down2((x, y))
+Down(x, y, z) = Down3((x, y, z))
 
 immutable Down2{A, B}
-    x :: A
-    y :: B
+    elems :: Tuple{A, B}
 end
+getindex(down::Down2, key) = down.elems[key]
 
-Down(x, y) = Down2(x, y)
-Down(x, y, z) = Down3(x, y, z)
-Down(x, y, z, t) = Down4(x, y, z, t)
 
 immutable Down3{A, B, C}
-    x :: A
-    y :: B
-    z :: C
+    elems :: Tuple{A, B, C}
 end
-
-immutable Down4{A, B, C, D}
-    x :: A
-    y :: B
-    z :: C
-    t :: D
-end
-
-
+getindex(down::Down3, key) = down.elems[key]
 
 end
