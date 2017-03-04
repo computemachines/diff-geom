@@ -1,5 +1,5 @@
 module Geometric
-import Base: getindex, +, -, *, ×
+import Base: getindex, +, -, *, ×, show
 export Up, Down, compatible
 
 Up(x, y) = Up2((x, y))
@@ -9,13 +9,13 @@ immutable Up2{A, B}
     elems :: Tuple{A, B}
 end
 getindex(up::Up2, key) = up.elems[key]
-
+show(io::IO, v::Up2) = print(io, "Up$(v.elems)")
 
 immutable Up3{A, B, C}
     elems :: Tuple{A, B, C}
 end
 getindex(up::Up3, key) = up.elems[key]
-
+show(io::IO, v::Up3) = print(io, "Up$(v.elems)")
 
 Down(x, y) = Down2((x, y))
 Down(x, y, z) = Down3((x, y, z))
@@ -24,12 +24,13 @@ immutable Down2{A, B}
     elems :: Tuple{A, B}
 end
 getindex(down::Down2, key) = down.elems[key]
-
+show(io::IO, v::Down2) = print(io, "Down$(v.elems)")
 
 immutable Down3{A, B, C}
     elems :: Tuple{A, B, C}
 end
 getindex(down::Down3, key) = down.elems[key]
+show(io::IO, v::Down3) = print(io, "Down$(v.elems)")
 
 +(a::Up2, b::Up2) = Up(a[1]+b[1], a[2]+b[2])
 +(a::Up3, b::Up3) = Up(a[1]+b[1], a[2]+b[2], a[3]+b[3])
