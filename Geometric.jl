@@ -1,6 +1,6 @@
 module Geometric
-import Base: getindex, +, -, *
-export Up, Down
+import Base: getindex, +, -, *, ×
+export Up, Down, compatible
 
 Up(x, y) = Up2((x, y))
 Up(x, y, z) = Up3((x, y, z))
@@ -45,7 +45,7 @@ typealias Scalar Union{Number, Symbol, Expr}
 typealias Vector2 Union{Up2, Down2}
 typealias Vector3 Union{Up3, Down3}
 
-# * assumes contraction. ∘ represents tensor product
+# * assumes contraction. ∘ represents something like the tensor product
 *(c::Scalar, v::Up2) = Up(c*v[1], c*v[2])
 *(v::Up2, c::Scalar) = c*v
 *(c::Scalar, v::Up3) = Up(c*v[1], c*v[2], c*v[3])
@@ -60,6 +60,34 @@ typealias Vector3 Union{Up3, Down3}
 *(up::Up3, down::Down3) = up[1]*down[1] + up[2]*down[2]
 *(down::Down3, up::Up3) = up*down
 
+compatible(a::Vector, b::Vector) = false
+compatible(a::Up2, b::Down2) = compatible(a[1], b[1]) && compatible(a[2], b[2])
+compatible(b::Down2, a::Up2) = compatible(a, b)
+compatible(a::Up3, b::Down3) = compatible(a[1], b[1]) && compatible(a[2], b[2]) && compatible(a[3], b[3])
+compatible(b::Down3, a::Up3) = compatible(a, b)
+compatible(c::Scalar, v::Union{Vector2, Vector3}) = true
+compatible(v::Union{Vector2, Vector3}, c::Scalar) = true
 
+×(a::Vector2, up::Up2) = Up(
+    compatible(a, up[1]) ? a*up[1] : a × up[1],
+    compatible(a, up[2]) ? a*up[2] : a × up[2]
+)
+
+×(a::Vector3, up::Up3) = Up(
+    compatible(a, up[1]) ? a*up[1] : a × up[1],
+    compatible(a, up[2]) ? a*up[2] : a × up[2],
+    compatible(a, up[3]) ? a*up[3] : a × up[3]
+)
+
+×(a::Vector2, down::Down2) = Down(
+    compatible(a, down[1]) ? a*down[1] : a × down[1],
+    compatible(a, down[2]) ? a*down[2] : a × down[2]
+)
+
+×(a::Vector3, down::Down3) = Down(
+    compatible(a, down[1]) ? a*down[1] : a × down[1],
+    compatible(a, down[2]) ? a*down[2] : a × down[2],
+    compatible(a, down[3]) ? a*down[3] : a × down[3]
+)
 
 end
