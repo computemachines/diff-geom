@@ -7,7 +7,7 @@ type MetricField
 end
 
 FlatPolarMetric = MetricField(
-    [[eye(2), eye(2)] [eye(2), eye(2)]]
+    [[1 0; 0 1/r^2] for theta=0:360, r=1:100]
 )
 
 end
